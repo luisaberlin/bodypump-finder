@@ -1,6 +1,13 @@
 import React, { useState } from "react";
 
-interface FilterProps {
+enum StudioName {
+  POTSDAMERPLATZ = "Potsdamerplatz",
+  GENDARMENMARKT = "Gendarmenmarkt",
+  BISMARCKSTRAßE = "Bismarckstraße",
+  OSTKREUZ = "Ostkreuz",
+}
+
+export interface FilterProps {
   onFilterChange: (studios: string[], days: string[]) => void;
 }
 
@@ -31,22 +38,28 @@ const Filter: React.FC<FilterProps> = ({ onFilterChange }) => {
       <div>
         <label htmlFor="studios">Select Studios:</label>
         <select id="studios" multiple onChange={handleStudiosChange}>
-          <option value="Potsdamerplatz">Potsdamerplatz</option>
-          <option value="Gendarmenmarkt">Gendarmenmarkt</option>
-          <option value="Bismarckstraße">Bismarckstraße</option>
-          <option value="Ostkreuz">Ostkreuz</option>
+          <option value={StudioName.POTSDAMERPLATZ}>
+            {StudioName.POTSDAMERPLATZ}
+          </option>
+          <option value={StudioName.GENDARMENMARKT}>
+            {StudioName.GENDARMENMARKT}
+          </option>
+          <option value={StudioName.BISMARCKSTRAßE}>
+            {StudioName.BISMARCKSTRAßE}
+          </option>
+          <option value={StudioName.OSTKREUZ}>{StudioName.OSTKREUZ}</option>
         </select>
       </div>
       <div>
         <label htmlFor="days">Select Days:</label>
         <select id="days" multiple onChange={handleDaysChange}>
-          <option value="Monday">Monday</option>
-          <option value="Tuesday">Tuesday</option>
-          <option value="Wednesday">Wednesday</option>
-          <option value="Thursday">Thursday</option>
-          <option value="Friday">Friday</option>
-          <option value="Saturday">Saturday</option>
-          <option value="Sunday">Sunday</option>
+          <option value="0">Monday</option>
+          <option value="1">Tuesday</option>
+          <option value="2">Wednesday</option>
+          <option value="3">Thursday</option>
+          <option value="4">Friday</option>
+          <option value="5">Saturday</option>
+          <option value="6">Sunday</option>
         </select>
       </div>
       <button onClick={handleFilterApply}>Apply Filter</button>

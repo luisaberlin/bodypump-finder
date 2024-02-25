@@ -1,13 +1,15 @@
 import { useState } from "react";
 import "./App.css";
-import Filter from "./Filter";
+import Filter, { FilterProps } from "./Filter";
 import Tables from "./tables";
 
 function App() {
-  const [filterValue, setFilterValue] = useState("");
+  const [filteredStudios, setFilteredStudios] = useState<string[]>([]);
+  const [filteredDays, setFilteredDays] = useState<string[]>([]);
 
-  const handleFilterChange = (value: string) => {
-    setFilterValue(value);
+  const handleFilterChange = (studios: string[], days: string[]) => {
+    setFilteredStudios(studios);
+    setFilteredDays(days);
   };
 
   return (
@@ -15,7 +17,10 @@ function App() {
       <h1>Bodypump Finder</h1>
       <Filter onFilterChange={handleFilterChange}></Filter>
 
-      <Tables filterValue={filterValue}></Tables>
+      <Tables
+        filteredStudios={filteredStudios}
+        filteredDays={filteredDays}
+      ></Tables>
     </>
   );
 }

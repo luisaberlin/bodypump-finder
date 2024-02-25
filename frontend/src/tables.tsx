@@ -1,18 +1,6 @@
 import React, { useEffect, useState } from "react";
 import StudioSchedule from "./studioSchedule";
 
-enum StudioNames {
-  POTSDAMERPLATZ = "Potsdamerplatz",
-  GENDARMENMARKT = "Gendarmenmarkt",
-  BISMARCKSTRAßE = "Bismarckstraße",
-  OSTKREUZ = "Ostkreuz",
-}
-
-interface IFilter {
-  includedStudios: Array<StudioNames>;
-  days: Array<0 | 1 | 2 | 3 | 4 | 5 | 6>;
-}
-
 export interface Course {
   time: string;
   trainer: string;
@@ -28,17 +16,19 @@ interface GymData {
 
 interface Props {
   data: GymData;
-  filter: IFilter;
+  // filter: IFilter;
+  filteredStudios: string[];
+  filteredDays: number[];
 }
 
-const Schedule: React.FC<Props> = ({ data, filter }) => {
+const Schedule: React.FC<Props> = ({ data, filteredStudios, filteredDays }) => {
   return (
     <div>
-      {filter.days.map((dayIndex: number) => (
+      {filteredDays.map((dayIndex: number) => (
         <div key={getDayName(dayIndex)}>
           <h2>{getDayName(dayIndex)}</h2>
 
-          {filter.includedStudios.map((studio: string) => {
+          {filteredStudios.map((studio: string) => {
             return (
               <div key={studio}>
                 {data[studio] ? (
@@ -72,30 +62,13 @@ function getDayName(index: number): string {
   return days[index];
 }
 
-const filter: IFilter = {
-  includedStudios: [
-    StudioNames.GENDARMENMARKT,
-    StudioNames.POTSDAMERPLATZ,
-    StudioNames.BISMARCKSTRAßE,
-    // Studios.OSTKREUZ,
-  ],
-  days: [
-    // 0, // Monday
-    // 1, // Tuesday
-    2, // Wednesday
-    3, // Thursday
-    // 4, // Friday
-    // 5, // Saturday
-    // 6, // Sunday
-  ],
-};
-
 interface TableProps {
-  filterValue: string;
+  filteredStudios: string[];
+  filteredDays: number[];
 }
 
 // Example usage:
-const Tables: React.FC<TableProps> = ({ filterValue }) => {
+const Tables: React.FC<TableProps> = ({ filteredStudios, filteredDays }) => {
   const [data, setData] = useState<GymData>({});
 
   useEffect(() => {
@@ -114,7 +87,13 @@ const Tables: React.FC<TableProps> = ({ filterValue }) => {
     fetchData(); // Call the async function when the component mounts
   }, []); // Empty dependency array ensures the effect runs only once when the component mounts
 
-  return <Schedule data={data} filter={filter} />;
+  return (
+    <Schedule
+      data={data}
+      filteredStudios={filteredStudios}
+      filteredDays={filteredDays}
+    />
+  );
 };
 
 export default Tables;
