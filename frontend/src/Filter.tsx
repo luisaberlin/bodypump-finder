@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Select, { MultiValue } from "react-select";
 
 enum StudioName {
   POTSDAMERPLATZ = "Potsdamerplatz",
@@ -6,6 +7,25 @@ enum StudioName {
   BISMARCKSTRAßE = "Bismarckstraße",
   OSTKREUZ = "Ostkreuz",
 }
+
+type OptionsType = { label: string; value: string };
+
+const studioOptions: OptionsType[] = [
+  { value: StudioName.BISMARCKSTRAßE, label: StudioName.BISMARCKSTRAßE },
+  { value: StudioName.GENDARMENMARKT, label: StudioName.GENDARMENMARKT },
+  { value: StudioName.OSTKREUZ, label: StudioName.OSTKREUZ },
+  { value: StudioName.POTSDAMERPLATZ, label: StudioName.POTSDAMERPLATZ },
+];
+
+const dayOptions: OptionsType[] = [
+  { value: "0", label: "Monday" },
+  { value: "1", label: "Tuesday" },
+  { value: "2", label: "Wednesday" },
+  { value: "3", label: "Thursday" },
+  { value: "4", label: "Friday" },
+  { value: "5", label: "Saturday" },
+  { value: "6", label: "Sunday" },
+];
 
 export interface FilterProps {
   onFilterChange: (studios: string[], days: string[]) => void;
@@ -15,20 +35,6 @@ const Filter: React.FC<FilterProps> = ({ onFilterChange }) => {
   const [selectedStudios, setSelectedStudios] = useState<string[]>([]);
   const [selectedDays, setSelectedDays] = useState<string[]>([]);
 
-  const handleStudiosChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedOptions = Array.from(event.target.selectedOptions).map(
-      (option) => option.value
-    );
-    setSelectedStudios(selectedOptions);
-  };
-
-  const handleDaysChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedOptions = Array.from(event.target.selectedOptions).map(
-      (option) => option.value
-    );
-    setSelectedDays(selectedOptions);
-  };
-
   const handleFilterApply = () => {
     onFilterChange(selectedStudios, selectedDays);
   };
@@ -36,31 +42,28 @@ const Filter: React.FC<FilterProps> = ({ onFilterChange }) => {
   return (
     <div>
       <div>
-        <label htmlFor="studios">Select Studios:</label>
-        <select id="studios" multiple onChange={handleStudiosChange}>
-          <option value={StudioName.POTSDAMERPLATZ}>
-            {StudioName.POTSDAMERPLATZ}
-          </option>
-          <option value={StudioName.GENDARMENMARKT}>
-            {StudioName.GENDARMENMARKT}
-          </option>
-          <option value={StudioName.BISMARCKSTRAßE}>
-            {StudioName.BISMARCKSTRAßE}
-          </option>
-          <option value={StudioName.OSTKREUZ}>{StudioName.OSTKREUZ}</option>
-        </select>
+        <Select
+          isMulti
+          name="studios"
+          options={studioOptions}
+          placeholder="Studios..."
+          onChange={(newValue: MultiValue<OptionsType>) => {
+            if (newValue === null) return;
+            setSelectedStudios(newValue.map((el) => el.value));
+          }}
+        />
       </div>
       <div>
-        <label htmlFor="days">Select Days:</label>
-        <select id="days" multiple onChange={handleDaysChange}>
-          <option value="0">Monday</option>
-          <option value="1">Tuesday</option>
-          <option value="2">Wednesday</option>
-          <option value="3">Thursday</option>
-          <option value="4">Friday</option>
-          <option value="5">Saturday</option>
-          <option value="6">Sunday</option>
-        </select>
+        <Select
+          isMulti
+          name="days"
+          options={dayOptions}
+          placeholder="Days..."
+          onChange={(newValue: MultiValue<OptionsType>) => {
+            if (newValue === null) return;
+            setSelectedDays(newValue.map((el) => el.value));
+          }}
+        />
       </div>
       <button onClick={handleFilterApply}>Apply Filter</button>
     </div>
