@@ -90,17 +90,12 @@ const filter: IFilter = {
   ],
 };
 
-// Example usage:
-const Tables: React.FC = () => {
-  //   const data: GymData = {
-  //     Potsdamerplatz: [
-  //       { time: "12:00", availability: "12/30 spots", trainer: "Nina" },
-  //       { time: "19:00", availability: "29/22 spots", trainer: "Hans" },
-  //     ],
-  //     Ostkreuz: [{ time: "08:30", availability: "10/10 spots", trainer: "Olli" }],
-  //     // Add more gym locations as needed
-  //   };
+interface TableProps {
+  filterValue: string;
+}
 
+// Example usage:
+const Tables: React.FC<TableProps> = ({ filterValue }) => {
   const [data, setData] = useState<GymData>({});
 
   useEffect(() => {
