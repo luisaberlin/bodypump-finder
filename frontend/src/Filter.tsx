@@ -35,8 +35,18 @@ const Filter: React.FC<FilterProps> = ({ onFilterChange }) => {
   const [selectedStudios, setSelectedStudios] = useState<string[]>([]);
   const [selectedDays, setSelectedDays] = useState<string[]>([]);
 
-  const handleFilterApply = () => {
-    onFilterChange(selectedStudios, selectedDays);
+  const handleStudioChange = (newValue: MultiValue<OptionsType>) => {
+    if (newValue === null) return;
+    const newSelectedStudios = newValue.map((el) => el.value);
+    setSelectedStudios(newSelectedStudios);
+    onFilterChange(newSelectedStudios, selectedDays);
+  };
+
+  const handleDayChange = (newValue: MultiValue<OptionsType>) => {
+    if (newValue === null) return;
+    const newSelectedDays = newValue.map((el) => el.value);
+    setSelectedDays(newSelectedDays);
+    onFilterChange(selectedStudios, newSelectedDays);
   };
 
   return (
@@ -47,10 +57,9 @@ const Filter: React.FC<FilterProps> = ({ onFilterChange }) => {
           name="studios"
           options={studioOptions}
           placeholder="Studios..."
-          onChange={(newValue: MultiValue<OptionsType>) => {
-            if (newValue === null) return;
-            setSelectedStudios(newValue.map((el) => el.value));
-          }}
+          onChange={(newValue: MultiValue<OptionsType>) =>
+            handleStudioChange(newValue)
+          }
         />
       </div>
       <div>
@@ -59,13 +68,11 @@ const Filter: React.FC<FilterProps> = ({ onFilterChange }) => {
           name="days"
           options={dayOptions}
           placeholder="Days..."
-          onChange={(newValue: MultiValue<OptionsType>) => {
-            if (newValue === null) return;
-            setSelectedDays(newValue.map((el) => el.value));
-          }}
+          onChange={(newValue: MultiValue<OptionsType>) =>
+            handleDayChange(newValue)
+          }
         />
       </div>
-      <button onClick={handleFilterApply}>Apply Filter</button>
     </div>
   );
 };
