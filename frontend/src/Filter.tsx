@@ -54,6 +54,7 @@ const customStyles: StylesConfig<OptionsType, IsMulti> = {
   multiValueLabel: (provided) => ({
     ...provided,
     background: "#FAEEE7",
+    fontSize: 12,
   }),
   multiValueRemove: (provided) => ({
     ...provided,
@@ -110,7 +111,15 @@ const Filter: React.FC<FilterProps> = ({ onFilterChange }) => {
   const handleDayChange = (newValue: MultiValue<OptionsType>) => {
     if (newValue === null) return;
 
-    const newSelectedDays = newValue.map((el) => el.value);
+    console.log("day index:", newValue);
+
+    const sortedNewValue = (newValue as unknown as OptionsType[]).sort(
+      (a, b) => {
+        return parseInt(a.value) - parseInt(b.value);
+      }
+    );
+
+    const newSelectedDays = sortedNewValue.map((el) => el.value);
     const defaultDayValues = dayOptions.map((el) => el.value);
 
     const newSelectionValue =
