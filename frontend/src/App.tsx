@@ -13,7 +13,7 @@ function App() {
   };
 
   return (
-    <>
+    <div className="app">
       <h1>Bodypump Finder</h1>
       <Filter onFilterChange={handleFilterChange}></Filter>
 
@@ -21,7 +21,7 @@ function App() {
         filteredStudios={filteredStudios}
         filteredDays={filteredDays}
       ></Tables>
-    </>
+    </div>
   );
 }
 

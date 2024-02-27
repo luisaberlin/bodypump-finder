@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Select, { MultiValue, StylesConfig } from "react-select";
+import "./css/Filter.css";
 
 enum StudioName {
   POTSDAMERPLATZ = "Potsdamerplatz",
@@ -57,6 +58,9 @@ const customStyles: StylesConfig<OptionsType, IsMulti> = {
   multiValueRemove: (provided) => ({
     ...provided,
     background: "#FAEEE7",
+    ":hover": {
+      backgroundColor: "#faeee7",
+    },
   }),
   indicatorSeparator: (provided) => ({
     ...provided,
@@ -104,25 +108,25 @@ const Filter: React.FC<FilterProps> = ({ onFilterChange }) => {
 
   return (
     <div className="filter">
-      <div>
+      <div className="studio-filter">
         <Select
           isMulti
           name="studios"
           options={studioOptions}
-          placeholder="Studios..."
+          placeholder="Select studios..."
           onChange={(newValue: MultiValue<OptionsType>) =>
             handleStudioChange(newValue)
           }
           styles={customStyles}
         />
       </div>
-      <div>
+      <div className="day-filter">
         <Select
           isMulti
           name="days"
           options={dayOptions}
           defaultValue={dayOptions}
-          placeholder="Days..."
+          placeholder="Select days..."
           onChange={(newValue: MultiValue<OptionsType>) =>
             handleDayChange(newValue)
           }

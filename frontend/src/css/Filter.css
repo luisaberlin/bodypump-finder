@@ -1,3 +1,20 @@
-.css-1y7rh0y-MultiValueGeneric2 {
-  background-color: aqua;
+.filter {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.filter > div {
+  width: 49%;
+}
+
+/* Media query for mobile devices */
+@media screen and (max-width: 767px) {
+  .filter {
+    flex-wrap: wrap;
+  }
+
+  .filter > div {
+    width: 100%;
+  }
 }
