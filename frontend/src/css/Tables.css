@@ -1,0 +1,21 @@
+table {
+  border-collapse: separate;
+  border: solid #fffffe 1px;
+  border-radius: 6px;
+  background-color: #faeee7;
+  border: 0;
+  border-spacing: 0;
+  margin-top: 5px;
+}
+
+td,
+th {
+  border-left: solid #fffffe 1px;
+  border-top: solid #fffffe 1px;
+  padding: 18px;
+}
+
+td:first-child,
+th:first-child {
+  border-left: none;
+}

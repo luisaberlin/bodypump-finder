@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Select, { MultiValue } from "react-select";
+import Select, { MultiValue, StylesConfig } from "react-select";
 
 enum StudioName {
   POTSDAMERPLATZ = "Potsdamerplatz",
@@ -27,6 +27,45 @@ const dayOptions: OptionsType[] = [
   { value: "6", label: "Sunday" },
 ];
 
+type IsMulti = false;
+
+const customStyles: StylesConfig<OptionsType, IsMulti> = {
+  container: (provided) => ({
+    ...provided,
+    marginTop: 10,
+  }),
+  control: (provided) => ({
+    ...provided,
+    borderColor: "#594A4E",
+    backgroundColor: "#FFFFE",
+  }),
+  menu: (provided) => ({
+    ...provided,
+    background: "transparent",
+    width: "4em",
+  }),
+  multiValueLabel: (provided) => ({
+    ...provided,
+    background: "#FAEEE7",
+  }),
+  multiValueRemove: (provided) => ({
+    ...provided,
+    background: "#FAEEE7",
+  }),
+  indicatorSeparator: (provided) => ({
+    ...provided,
+    backgroundColor: "#594A4E",
+  }),
+  dropdownIndicator: (provided) => ({
+    ...provided,
+    color: "#594A4E",
+  }),
+  clearIndicator: (provided) => ({
+    ...provided,
+    color: "#594A4E",
+  }),
+};
+
 export interface FilterProps {
   onFilterChange: (studios: string[], days: string[]) => void;
 }
@@ -52,7 +91,7 @@ const Filter: React.FC<FilterProps> = ({ onFilterChange }) => {
   };
 
   return (
-    <div>
+    <div className="filter">
       <div>
         <Select
           isMulti
@@ -62,6 +101,7 @@ const Filter: React.FC<FilterProps> = ({ onFilterChange }) => {
           onChange={(newValue: MultiValue<OptionsType>) =>
             handleStudioChange(newValue)
           }
+          styles={customStyles}
         />
       </div>
       <div>
@@ -74,6 +114,7 @@ const Filter: React.FC<FilterProps> = ({ onFilterChange }) => {
           onChange={(newValue: MultiValue<OptionsType>) =>
             handleDayChange(newValue)
           }
+          styles={customStyles}
         />
       </div>
     </div>

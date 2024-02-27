@@ -1,5 +1,5 @@
 import { useState } from "react";
-import "./App.css";
+import "./css/App.css";
 import Filter from "./Filter";
 import Tables from "./tables";
 

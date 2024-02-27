@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import StudioSchedule from "./studioSchedule";
+import "./css/Tables.css";
 
 export interface Course {
   time: string;
