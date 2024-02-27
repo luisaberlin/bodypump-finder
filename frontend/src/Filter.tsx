@@ -87,23 +87,37 @@ export interface FilterProps {
 }
 
 const Filter: React.FC<FilterProps> = ({ onFilterChange }) => {
-  const [selectedStudios, setSelectedStudios] = useState<string[]>([]);
+  const [selectedStudios, setSelectedStudios] = useState<string[]>(
+    studioOptions.map((option) => option.value)
+  );
   const [selectedDays, setSelectedDays] = useState<string[]>(
     dayOptions.map((option) => option.value)
   );
 
   const handleStudioChange = (newValue: MultiValue<OptionsType>) => {
     if (newValue === null) return;
+
     const newSelectedStudios = newValue.map((el) => el.value);
-    setSelectedStudios(newSelectedStudios);
-    onFilterChange(newSelectedStudios, selectedDays);
+    const defaultStudioValues = studioOptions.map((el) => el.value);
+
+    const newSelectionValue =
+      newValue.length > 0 ? newSelectedStudios : defaultStudioValues;
+
+    setSelectedStudios(newSelectionValue);
+    onFilterChange(newSelectionValue, selectedDays);
   };
 
   const handleDayChange = (newValue: MultiValue<OptionsType>) => {
     if (newValue === null) return;
+
     const newSelectedDays = newValue.map((el) => el.value);
-    setSelectedDays(newSelectedDays);
-    onFilterChange(selectedStudios, newSelectedDays);
+    const defaultDayValues = dayOptions.map((el) => el.value);
+
+    const newSelectionValue =
+      newValue.length > 0 ? newSelectedDays : defaultDayValues;
+
+    setSelectedDays(newSelectionValue);
+    onFilterChange(selectedStudios, newSelectionValue);
   };
 
   return (
@@ -125,7 +139,7 @@ const Filter: React.FC<FilterProps> = ({ onFilterChange }) => {
           isMulti
           name="days"
           options={dayOptions}
-          defaultValue={dayOptions}
+          // defaultValue={dayOptions}
           placeholder="Select days..."
           onChange={(newValue: MultiValue<OptionsType>) =>
             handleDayChange(newValue)

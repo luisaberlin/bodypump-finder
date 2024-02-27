@@ -15,14 +15,11 @@ h1 {
 h3,
 td,
 .filter,
-p {
+p,
+a {
   font-family: "Verdana";
   font-weight: 100;
   font-size: 80%;
-}
-
-h3 {
-  font-size: inherit; /* This ensures that h3 elements don't inherit font size from their parent */
 }
 
 h2 {
@@ -37,6 +34,10 @@ p {
   margin-top: 20px;
   margin-bottom: 20px;
   line-height: 150%;
+}
+
+.sources {
+  margin-top: 100px;
 }
 
 .app {

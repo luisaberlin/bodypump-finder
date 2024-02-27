@@ -49,7 +49,7 @@ function App() {
         filteredDays={filteredDays}
       ></Tables>
 
-      <p>
+      <div className="sources">
         <h3>Sources:</h3>
         {sources.map(function (source, idx) {
           return (
@@ -58,7 +58,7 @@ function App() {
             </li>
           );
         })}
-      </p>
+      </div>
     </div>
   );
 }
