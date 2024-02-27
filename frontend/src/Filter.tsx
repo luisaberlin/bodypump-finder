@@ -27,22 +27,28 @@ const dayOptions: OptionsType[] = [
   { value: "6", label: "Sunday" },
 ];
 
-type IsMulti = false;
+type IsMulti = false | true;
 
 const customStyles: StylesConfig<OptionsType, IsMulti> = {
   container: (provided) => ({
     ...provided,
     marginTop: 10,
   }),
-  control: (provided) => ({
+  control: (provided, state) => ({
     ...provided,
     borderColor: "#594A4E",
+    boxShadow: state.isFocused ? "none" : "none",
     backgroundColor: "#FFFFE",
+    ":hover": {
+      borderColor: "#594A4E",
+    },
   }),
-  menu: (provided) => ({
+  option: (provided, state) => ({
     ...provided,
-    background: "transparent",
-    width: "4em",
+    backgroundColor: state.isFocused ? "#faeee7" : "#fffffe",
+    ":hover": {
+      backgroundColor: "#faeee7",
+    },
   }),
   multiValueLabel: (provided) => ({
     ...provided,
@@ -59,10 +65,16 @@ const customStyles: StylesConfig<OptionsType, IsMulti> = {
   dropdownIndicator: (provided) => ({
     ...provided,
     color: "#594A4E",
+    ":hover": {
+      color: "#594A4E",
+    },
   }),
   clearIndicator: (provided) => ({
     ...provided,
     color: "#594A4E",
+    ":hover": {
+      color: "#594A4E",
+    },
   }),
 };
 
