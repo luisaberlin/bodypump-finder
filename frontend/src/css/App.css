@@ -1,5 +1,42 @@
+body {
+  background-color: #fffffe;
+  color: #33272a;
+}
+
+h1,
+h2 {
+  font-family: "Koulen";
+}
+
 h1 {
   text-align: center;
+}
+
+h3,
+td,
+.filter,
+p {
+  font-family: "Verdana";
+  font-weight: 100;
+  font-size: 80%;
+}
+
+h3 {
+  font-size: inherit; /* This ensures that h3 elements don't inherit font size from their parent */
+}
+
+h2 {
+  margin-top: 20px;
+}
+
+h3 {
+  margin-top: 10px;
+}
+
+p {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  line-height: 150%;
 }
 
 .app {
@@ -8,6 +45,10 @@ h1 {
   margin: auto;
   padding-bottom: 25px;
   padding-top: 25px;
+}
+
+a {
+  color: #594a4e;
 }
 
 /* Media query for mobile devices */

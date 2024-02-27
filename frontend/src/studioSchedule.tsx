@@ -10,15 +10,19 @@ const StudioSchedule: React.FC<{ studio: string; courses: Course[] }> = ({
       <h3>{studio}</h3>
       <table>
         <tbody>
-          {courses.map((course: Course, index: number) => {
-            return (
+          {courses.length > 0 ? (
+            courses.map((course: Course, index: number) => (
               <tr key={index}>
                 <td>{course.time}</td>
                 <td>{course.availability}</td>
                 <td>{course.trainer}</td>
               </tr>
-            );
-          })}
+            ))
+          ) : (
+            <tr>
+              <td>No courses</td>
+            </tr>
+          )}
         </tbody>
       </table>
     </div>

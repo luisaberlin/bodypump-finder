@@ -13,7 +13,7 @@ export enum StudioNames {
   OSTKREUZ = "Ostkreuz",
 }
 
-const studios = [
+export const studios = [
   {
     name: StudioNames.POTSDAMERPLATZ,
     url: "https://www.eversports.de/widget/w/2obfkr",
@@ -86,7 +86,8 @@ function selectCoursesPerDay(
       ellipsis.each((childIndex, childElement) => {
         switch (childIndex) {
           case 0:
-            availability = selector(childElement).text();
+            const text = selector(childElement).text();
+            availability = text === "sold out" ? text : text.split(" ")[0];
             break;
           case 1:
             trainer = selector(childElement).text();

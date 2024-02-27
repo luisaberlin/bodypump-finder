@@ -20,3 +20,15 @@ td:first-child,
 th:first-child {
   border-left: none;
 }
+
+table td:nth-child(1) {
+  width: 20%;
+}
+
+table td:nth-child(2) {
+  width: 20%;
+}
+
+table td:nth-child(3) {
+  width: 60%;
+}

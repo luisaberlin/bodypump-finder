@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import { getAllCourses } from "./controller/getAllCourses";
+import { getSources } from "./controller/getSources";
 
 export function buildApi() {
   const app = express();
@@ -11,6 +12,10 @@ export function buildApi() {
 
   app.get("/api", async (req, res, next) => {
     await getAllCourses(req, res, next);
+  });
+
+  app.get("/api/sources", async (req, res, next) => {
+    await getSources(req, res, next);
   });
 
   app.use(function (_req, res, _next) {

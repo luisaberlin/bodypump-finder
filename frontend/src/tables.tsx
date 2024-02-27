@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import StudioSchedule from "./studioSchedule";
 import "./css/Tables.css";
+import { serverUrl } from "./App";
 
 export interface Course {
   time: string;
@@ -40,19 +41,14 @@ const Schedule: React.FC<Props> = ({ data, filteredStudios, filteredDays }) => {
       {filteredDays.map((dayIndex: string) => (
         <div key={getDayName(+dayIndex)}>
           <h2>{getDayName(+dayIndex)}</h2>
-
           {filteredStudios.map((studio: string) => {
             return (
               <div key={studio}>
-                {data[studio] ? (
-                  <StudioSchedule
-                    key={studio}
-                    studio={studio}
-                    courses={data[studio][+dayIndex]}
-                  />
-                ) : (
-                  "No courses"
-                )}
+                <StudioSchedule
+                  key={studio}
+                  studio={studio}
+                  courses={data[studio][+dayIndex]}
+                />
               </div>
             );
           })}
@@ -73,16 +69,13 @@ const Tables: React.FC<TableProps> = ({ filteredStudios, filteredDays }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("http://localhost:3000/api");
+        const response = await fetch(`${serverUrl}/api`);
         const jsonData = await response.json();
-        setData(jsonData as unknown as GymData); // Update state with fetched data
-
-        console.log(jsonData as unknown as GymData);
+        setData(jsonData as unknown as GymData);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
-
     fetchData(); // Call the async function when the component mounts
   }, []); // Empty dependency array ensures the effect runs only once when the component mounts
 
