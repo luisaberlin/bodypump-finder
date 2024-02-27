@@ -16,38 +16,9 @@ interface GymData {
 
 interface Props {
   data: GymData;
-  // filter: IFilter;
   filteredStudios: string[];
-  filteredDays: number[];
+  filteredDays: string[];
 }
-
-const Schedule: React.FC<Props> = ({ data, filteredStudios, filteredDays }) => {
-  return (
-    <div>
-      {filteredDays.map((dayIndex: number) => (
-        <div key={getDayName(dayIndex)}>
-          <h2>{getDayName(dayIndex)}</h2>
-
-          {filteredStudios.map((studio: string) => {
-            return (
-              <div key={studio}>
-                {data[studio] ? (
-                  <StudioSchedule
-                    key={studio}
-                    studio={studio}
-                    courses={data[studio][dayIndex]}
-                  />
-                ) : (
-                  "No data"
-                )}
-              </div>
-            );
-          })}
-        </div>
-      ))}
-    </div>
-  );
-};
 
 function getDayName(index: number): string {
   const days = [
@@ -62,12 +33,39 @@ function getDayName(index: number): string {
   return days[index];
 }
 
+const Schedule: React.FC<Props> = ({ data, filteredStudios, filteredDays }) => {
+  return (
+    <div>
+      {filteredDays.map((dayIndex: string) => (
+        <div key={getDayName(+dayIndex)}>
+          <h2>{getDayName(+dayIndex)}</h2>
+
+          {filteredStudios.map((studio: string) => {
+            return (
+              <div key={studio}>
+                {data[studio] ? (
+                  <StudioSchedule
+                    key={studio}
+                    studio={studio}
+                    courses={data[studio][+dayIndex]}
+                  />
+                ) : (
+                  "No courses"
+                )}
+              </div>
+            );
+          })}
+        </div>
+      ))}
+    </div>
+  );
+};
+
 interface TableProps {
   filteredStudios: string[];
-  filteredDays: number[];
+  filteredDays: string[];
 }
 
-// Example usage:
 const Tables: React.FC<TableProps> = ({ filteredStudios, filteredDays }) => {
   const [data, setData] = useState<GymData>({});
 

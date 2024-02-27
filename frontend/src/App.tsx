@@ -1,6 +1,6 @@
 import { useState } from "react";
 import "./App.css";
-import Filter, { FilterProps } from "./Filter";
+import Filter from "./Filter";
 import Tables from "./tables";
 
 function App() {
