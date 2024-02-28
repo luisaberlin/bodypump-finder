@@ -4,6 +4,11 @@
     "module": "commonjs",
     "strict": true,
     "esModuleInterop": true,
-    "types": ["node"]
+    "types": ["node"],
+    "outDir": "build",                        /* Redirect output structure to the directory. */
+    "rootDir": "src",                         /* Specify the root directory of input files. Use to control the output directory structure with --outDir. */
+    "noImplicitAny": true,
+    "incremental": true,                      /* Vercel requirement */
+    "noUncheckedIndexedAccess": true,         /* Vercel requirement */
   }
 }

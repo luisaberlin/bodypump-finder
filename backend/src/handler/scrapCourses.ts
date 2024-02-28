@@ -60,7 +60,9 @@ function getWeekdayByIndex(number: number): string {
     "Sunday",
   ];
   const index = number % 7;
-  return weekdays[index];
+  const weekday = weekdays[index];
+  if (!weekday) throw new Error('No weekday by dayIndex')
+  return weekday;
 }
 
 function selectCoursesPerDay(
@@ -79,7 +81,7 @@ function selectCoursesPerDay(
         .split(" ● ")[0];
       const sessionName = selector(element).find(".session-name").text();
 
-      let availability = "";
+      let availability: string | undefined = "";
       let trainer = "";
       //   let room = "";
       const ellipsis = selector(element).children(".ellipsis");
@@ -99,7 +101,7 @@ function selectCoursesPerDay(
       });
 
       if (sessionName.toLocaleLowerCase().includes("bodypump")) {
-        coursesPerDay.push({ time, sessionName, availability, trainer });
+        coursesPerDay.push({ time: time ? time : 'No time', sessionName, availability: availability ? availability : "No availability", trainer });
       }
     });
 
@@ -126,7 +128,9 @@ function selectCoursesPerStudio(
       } as IExtendedCourseData;
     });
 
-    const allCoursesPerDay = courses[dayIndex % 7].concat(
+    const course = courses[dayIndex % 7];
+    if(!course) throw new Error('No course by this dayIndex');
+    const allCoursesPerDay = course.concat(
       extendedCoursesPerDay
     );
 
