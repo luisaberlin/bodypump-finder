@@ -10,7 +10,7 @@ lerna-debug.log*
 tsconfig.tsbuildinfo
 
 node_modules
-backend/build
+backend/dist
 dist-ssr
 *.local
 
