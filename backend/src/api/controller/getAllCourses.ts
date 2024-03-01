@@ -2,7 +2,7 @@ import * as express from "express";
 import { scrapAllCourses } from "../../handler/scrapCourses";
 
 export async function getAllCourses(
-  req: express.Request,
+  _req: express.Request,
   res: express.Response,
   next: express.NextFunction
 ) {

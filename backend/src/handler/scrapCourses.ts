@@ -61,14 +61,11 @@ function getWeekdayByIndex(number: number): string {
   ];
   const index = number % 7;
   const weekday = weekdays[index];
-  if (!weekday) throw new Error('No weekday by dayIndex')
+  if (!weekday) throw new Error("No weekday by dayIndex");
   return weekday;
 }
 
-function selectCoursesPerDay(
-  selector: cheerio.CheerioAPI,
-  element: cheerio.Element
-) {
+function selectCoursesPerDay(selector: cheerio.Root, element: cheerio.Element) {
   let coursesPerDay: CourseData[] = [];
 
   selector(element)
@@ -101,17 +98,19 @@ function selectCoursesPerDay(
       });
 
       if (sessionName.toLocaleLowerCase().includes("bodypump")) {
-        coursesPerDay.push({ time: time ? time : 'No time', sessionName, availability: availability ? availability : "No availability", trainer });
+        coursesPerDay.push({
+          time: time ? time : "No time",
+          sessionName,
+          availability: availability ? availability : "No availability",
+          trainer,
+        });
       }
     });
 
   return coursesPerDay;
 }
 
-function selectCoursesPerStudio(
-  selector: cheerio.CheerioAPI,
-  studioName: string
-) {
+function selectCoursesPerStudio(selector: cheerio.Root, studioName: string) {
   let courses = Array<IExtendedCourseData[]>(7).fill([]);
 
   selector(".calendar__slot-list").each((dayIndex, element) => {
@@ -129,10 +128,8 @@ function selectCoursesPerStudio(
     });
 
     const course = courses[dayIndex % 7];
-    if(!course) throw new Error('No course by this dayIndex');
-    const allCoursesPerDay = course.concat(
-      extendedCoursesPerDay
-    );
+    if (!course) throw new Error("No course by this dayIndex");
+    const allCoursesPerDay = course.concat(extendedCoursesPerDay);
 
     const times = allCoursesPerDay.map(({ time }) => time);
     const coursesWithoutDuplicates = allCoursesPerDay.filter(
