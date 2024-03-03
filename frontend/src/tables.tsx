@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import StudioSchedule from "./studioSchedule";
 import "./css/Tables.css";
-import { serverUrl } from "./App";
+// import { serverUrl } from "./App";
 
 export interface Course {
   time: string;
