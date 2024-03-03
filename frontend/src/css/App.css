@@ -26,7 +26,8 @@ h3,
 td,
 .filter,
 p,
-a {
+a,
+.loading {
   font-family: "Verdana";
   font-weight: 100;
 }
