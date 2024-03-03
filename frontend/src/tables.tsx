@@ -69,6 +69,7 @@ const Tables: React.FC<TableProps> = ({ filteredStudios, filteredDays }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        console.log(`request: GET ${serverUrl}/api`);
         const response = await fetch(`${serverUrl}/api`);
         const jsonData = await response.json();
         setData(jsonData as unknown as GymData);
