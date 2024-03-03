@@ -19,8 +19,10 @@ function App() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        console.log(`request: GET ${serverUrl}/api/sources`);
-        const response = await fetch(`${serverUrl}/api/sources`);
+        // const response = await fetch(`${serverUrl}/api/sources`);
+        const response = await fetch(
+          `https://bodypump-finder.onrender.com/api/sources`
+        );
         const jsonData = await response.json();
         setSources(jsonData as unknown as ISources[]);
       } catch (error) {
