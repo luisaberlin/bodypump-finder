@@ -6,7 +6,15 @@ import { getSources } from "./controller/getSources";
 export function buildApi() {
   const app = express();
 
-  app.use(cors({ origin: ["http://localhost:5173", "http://localhost:4173"] }));
+  app.use(
+    cors({
+      origin: [
+        "http://localhost:5173",
+        "http://localhost:4173",
+        "https://bodypump-finder-ui.onrender.com",
+      ],
+    })
+  );
 
   app.use(express.json());
 
