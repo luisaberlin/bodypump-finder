@@ -3,7 +3,8 @@ import "./css/App.css";
 import Filter from "./Filter";
 import Tables from "./tables";
 
-export const serverUrl = "http://localhost:3000";
+// export const serverUrl = "http://localhost:3000";
+export const serverUrl = "https://bodypump-finder.onrender.com";
 
 interface ISources {
   name: string;
