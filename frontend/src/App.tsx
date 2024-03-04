@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import "./css/App.css";
 import Filter from "./Filter";
 import Tables from "./tables";
-import { getMondayAndSunday } from "./utils/dateUtils";
+// import { getMondayAndSunday } from "./utils/dateUtils";
+import WeekSelector from "./WeekSelector";
 
 export const serverUrl = "https://bodypump-finder.onrender.com";
 
@@ -30,7 +31,7 @@ interface GymDataCache {
 }
 
 const COURSES_CACHE_KEY = "courses";
-const COURSES_CACHE_EXPIRATION_TIME = 15 * 60 * 1000; // 10 minutes
+const COURSES_CACHE_EXPIRATION_TIME = 15 * 60 * 1000; // 15 minutes
 
 function App() {
   const [filteredStudios, setFilteredStudios] = useState<string[]>([]);
@@ -41,7 +42,7 @@ function App() {
   // const [monday, setMonday] = useState<string>("");
   // const [sunday, setSunday] = useState<string>("");
 
-  const { mondayFormetted, sundayFormetted } = getMondayAndSunday();
+  // const { mondayFormetted, sundayFormetted } = getMondayAndSunday();
   // setMonday(mondayFormetted);
   // setSunday(sundayFormetted);
 
@@ -105,9 +106,11 @@ function App() {
         the shown data on the bottom of this page.
       </p>
 
-      <div className="selectedWeek">
+      <WeekSelector></WeekSelector>
+
+      {/* <div className="selectedWeek">
         {mondayFormetted} - {sundayFormetted}
-      </div>
+      </div> */}
       <div>
         {isLoading ? (
           <div className="loading">Loading Bodypump courses...</div>

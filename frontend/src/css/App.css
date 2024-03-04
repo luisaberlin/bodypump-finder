@@ -28,7 +28,8 @@ td,
 p,
 a,
 .loading,
-.selectedWeek {
+.selectedWeek,
+.weekSelector {
   font-family: "Verdana";
   font-weight: 100;
 }
