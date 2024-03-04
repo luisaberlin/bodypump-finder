@@ -1,25 +1,35 @@
 import { useState } from "react";
 import "./css/WeekSelector.css";
 
-const WeekSelector: React.FC = () => {
-  const types = ["This week", "Next week"];
-  const [selectedWeek, setSelectedWeek] = useState(types[0]);
+export interface WeekToggle {
+  onWeekSelectorChange: (option: string) => void;
+}
+
+export const weekOptions = ["This week", "Next week"];
+
+const WeekSelector: React.FC<WeekToggle> = ({ onWeekSelectorChange }) => {
+  const [selectedWeek, setSelectedWeek] = useState(weekOptions[0]);
 
   console.log(selectedWeek);
+
+  const handleWeekSelectorChange = (option: string) => {
+    setSelectedWeek(option);
+    onWeekSelectorChange(option);
+  };
 
   return (
     <div className="weekSelector">
       <button
-        className={selectedWeek === types[0] ? "active" : "inactive"}
-        onClick={() => setSelectedWeek(types[0])}
+        className={selectedWeek === weekOptions[0] ? "active" : "inactive"}
+        onClick={() => handleWeekSelectorChange(weekOptions[0])}
       >
-        {types[0]}
+        {weekOptions[0]}
       </button>
       <button
-        className={selectedWeek === types[1] ? "active" : "inactive"}
-        onClick={() => setSelectedWeek(types[1])}
+        className={selectedWeek === weekOptions[1] ? "active" : "inactive"}
+        onClick={() => handleWeekSelectorChange(weekOptions[1])}
       >
-        {types[1]}
+        {weekOptions[1]}
       </button>
     </div>
   );

@@ -3,7 +3,7 @@ import "./css/App.css";
 import Filter from "./Filter";
 import Tables from "./tables";
 // import { getMondayAndSunday } from "./utils/dateUtils";
-import WeekSelector from "./WeekSelector";
+import WeekSelector, { weekOptions } from "./WeekSelector";
 
 export const serverUrl = "https://bodypump-finder.onrender.com";
 
@@ -39,12 +39,7 @@ function App() {
   const [sources, setSources] = useState<ISources[]>([{ name: "", url: "" }]);
   const [courses, setCourses] = useState<GymData>({});
   const [isLoading, setIsLoading] = useState(true);
-  // const [monday, setMonday] = useState<string>("");
-  // const [sunday, setSunday] = useState<string>("");
-
-  // const { mondayFormetted, sundayFormetted } = getMondayAndSunday();
-  // setMonday(mondayFormetted);
-  // setSunday(sundayFormetted);
+  const [week, setWeek] = useState<string>(weekOptions[0]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -73,8 +68,10 @@ function App() {
       }
     }
 
-    const fetchData = async () => {
+    const fetchData = async (week: string) => {
       try {
+        // use week
+        console.log("selected week:", week);
         const response = await fetch(`${serverUrl}/api`);
         const jsonData = await response.json();
         setCourses(jsonData as unknown as GymData);
@@ -88,8 +85,12 @@ function App() {
         setIsLoading(false);
       }
     };
-    fetchData(); // Call the async function when the component mounts
-  }, []); // Empty dependency array ensures the effect runs only once when the component mounts
+    fetchData(week);
+  }, [week]);
+
+  const handleWeekSelectorChange = (option: string) => {
+    setWeek(option);
+  };
 
   const handleFilterChange = (studios: string[], days: string[]) => {
     setFilteredStudios(studios);
@@ -106,7 +107,9 @@ function App() {
         the shown data on the bottom of this page.
       </p>
 
-      <WeekSelector></WeekSelector>
+      <WeekSelector
+        onWeekSelectorChange={handleWeekSelectorChange}
+      ></WeekSelector>
 
       {/* <div className="selectedWeek">
         {mondayFormetted} - {sundayFormetted}
