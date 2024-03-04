@@ -24,6 +24,14 @@ export interface GymData {
   [key: string]: Course[][];
 }
 
+interface GymDataCache {
+  data: GymData;
+  timestamp: number;
+}
+
+const COURSES_CACHE_KEY = "courses";
+const COURSES_CACHE_EXPIRATION_TIME = 15 * 60 * 1000; // 10 minutes
+
 function App() {
   const [filteredStudios, setFilteredStudios] = useState<string[]>([]);
   const [filteredDays, setFilteredDays] = useState<string[]>([]);
@@ -52,11 +60,27 @@ function App() {
   }, []); // Empty dependency array ensures the effect runs only once when the component mounts
 
   useEffect(() => {
+    const cachedCourses = localStorage.getItem(COURSES_CACHE_KEY);
+    if (cachedCourses) {
+      const { timestamp, data } = JSON.parse(cachedCourses) as GymDataCache;
+
+      const now = new Date().getTime();
+      if (now - timestamp < COURSES_CACHE_EXPIRATION_TIME) {
+        setCourses(data);
+        setIsLoading(false);
+        return;
+      }
+    }
+
     const fetchData = async () => {
       try {
         const response = await fetch(`${serverUrl}/api`);
         const jsonData = await response.json();
         setCourses(jsonData as unknown as GymData);
+        localStorage.setItem(
+          COURSES_CACHE_KEY,
+          JSON.stringify({ data: jsonData, timestamp: new Date().getTime() })
+        );
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
