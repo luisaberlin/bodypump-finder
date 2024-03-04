@@ -8,6 +8,10 @@
   width: 49%;
 }
 
+.filter > div > div {
+  margin-top: 0;
+}
+
 /* Media query for mobile devices */
 @media screen and (max-width: 767px) {
   .filter {
@@ -16,5 +20,9 @@
 
   .filter > div {
     width: 100%;
+  }
+
+  .day-filter > div {
+    margin-top: 5px !important;
   }
 }

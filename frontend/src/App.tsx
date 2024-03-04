@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import "./css/App.css";
 import Filter from "./Filter";
 import Tables from "./tables";
+import { getMondayAndSunday } from "./utils/dateUtils";
 
 export const serverUrl = "https://bodypump-finder.onrender.com";
 
@@ -29,6 +30,12 @@ function App() {
   const [sources, setSources] = useState<ISources[]>([{ name: "", url: "" }]);
   const [courses, setCourses] = useState<GymData>({});
   const [isLoading, setIsLoading] = useState(true);
+  // const [monday, setMonday] = useState<string>("");
+  // const [sunday, setSunday] = useState<string>("");
+
+  const { mondayFormetted, sundayFormetted } = getMondayAndSunday();
+  // setMonday(mondayFormetted);
+  // setSunday(sundayFormetted);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -74,9 +81,12 @@ function App() {
         the shown data on the bottom of this page.
       </p>
 
+      <div className="selectedWeek">
+        {mondayFormetted} - {sundayFormetted}
+      </div>
       <div>
         {isLoading ? (
-          <div className="loading">Fetching Bodypump data...</div>
+          <div className="loading">Loading Bodypump courses...</div>
         ) : (
           <div>
             <Filter onFilterChange={handleFilterChange}></Filter>
