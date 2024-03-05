@@ -1,5 +1,4 @@
-import express from "express";
-import { Request, Response, NextFunction } from "express";
+import express, { Request, Response, NextFunction } from "express";
 import cors from "cors";
 import { getAllCourses } from "./controller/getAllCourses";
 import { getSources } from "./controller/getSources";
