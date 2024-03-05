@@ -6,15 +6,24 @@ import { getSources } from "./controller/getSources";
 export function buildApi() {
   const app = express();
 
-  app.use(
-    cors({
-      origin: [
-        "http://localhost:5173",
-        "http://localhost:4173",
-        "https://bodypump-finder-ui.onrender.com",
-      ],
-    })
-  );
+  const origin =
+    process.env.NODE_ENV === "production"
+      ? ["https://bodypump-finder-ui.onrender.com"]
+      : ["http://localhost:5173", "http://localhost:4173"];
+  app.use(cors({ origin }));
+
+  app.use((req, _res, next) => {
+    console.log(
+      JSON.stringify({
+        method: req.method,
+        url: req.url,
+        query: req.query,
+        params: req.params,
+        body: req.body,
+      })
+    );
+    next();
+  });
 
   app.use(express.json());
 

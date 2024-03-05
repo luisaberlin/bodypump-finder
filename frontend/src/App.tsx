@@ -5,7 +5,8 @@ import Tables from "./tables";
 // import { getMondayAndSunday } from "./utils/dateUtils";
 import WeekSelector, { weekOptions } from "./WeekSelector";
 
-export const serverUrl = "https://bodypump-finder.onrender.com";
+// eslint-disable-next-line react-refresh/only-export-components
+export const serverUrl = import.meta.env.VITE_API_URL;
 
 interface ISources {
   name: string;
@@ -40,6 +41,9 @@ function App() {
   const [courses, setCourses] = useState<GymData>({});
   const [isLoading, setIsLoading] = useState(true);
   const [week, setWeek] = useState<string>(weekOptions[0]);
+
+  // serverUrl = import.meta.env.VITE_API_URL;
+  console.log("API URL:", serverUrl);
 
   useEffect(() => {
     const fetchData = async () => {
