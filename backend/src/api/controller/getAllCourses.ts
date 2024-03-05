@@ -1,3 +1,4 @@
+// @ts-ignore
 import * as express from "express";
 import { scrapAllCourses } from "../../handler/scrapCourses";
 

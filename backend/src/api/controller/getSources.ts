@@ -1,3 +1,4 @@
+// @ts-ignore
 import { Request, Response, NextFunction } from "express";
 import { studios } from "../../handler/scrapCourses";
 

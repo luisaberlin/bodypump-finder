@@ -1,5 +1,7 @@
+// @ts-ignore
 import express from "express";
 import { Request, Response, NextFunction } from "express";
+// @ts-ignore
 import cors from "cors";
 import { getAllCourses } from "./controller/getAllCourses";
 import { getSources } from "./controller/getSources";
