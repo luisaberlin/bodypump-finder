@@ -7,7 +7,7 @@ export function buildApi() {
   const app = express();
 
   const origin =
-    process.env.NODE_ENV === "production"
+    process.env.NODE_ENV === "prod"
       ? ["https://bodypump-finder-ui.onrender.com"]
       : ["http://localhost:5173", "http://localhost:4173"];
   app.use(cors({ origin }));
