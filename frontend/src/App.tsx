@@ -5,7 +5,7 @@ import WeekSelector from "./WeekSelector";
 import { GymData, weekOptions } from "./utils/definitions";
 import Tables from "./Tables";
 
-const serverUrl = import.meta.env.VITE_API_URL;
+const url = import.meta.env.VITE_API_URL;
 
 interface ISources {
   name: string;
@@ -17,9 +17,17 @@ interface GymDataCache {
   timestamp: number;
 }
 
+interface SourcesCache {
+  data: ISources[];
+  timestamp: number;
+}
+
 const COURSES_CACHE_KEY = "this-week-courses";
 const NEXT_COURSES_CACHE_KEY = "next-week-courses";
 const CACHE_EXPIRATION_TIME = 15 * 60 * 1000; // 15 minutes
+
+const SOURCES_CACHE_KEY = "sources";
+const SOURCES_CACHE_EXPIRATION_TIME = 24 * 60 * 60 * 1000; // 1 day
 
 function App() {
   const [filteredStudios, setFilteredStudios] = useState<string[]>([]);
@@ -30,29 +38,18 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [week, setWeek] = useState<string>(weekOptions[0]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(`${serverUrl}/api/sources`);
-        const jsonData = await response.json();
-        setSources(jsonData as unknown as ISources[]);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-    fetchData();
-  }, []);
-
-  const fetchCourses = async (
+  const fetchData = async (
     url: string,
     cacheKey: string,
-    stateSetter: React.Dispatch<React.SetStateAction<GymData>>,
-    weekOption: number
+    setter:
+      | React.Dispatch<React.SetStateAction<GymData>>
+      | React.Dispatch<React.SetStateAction<ISources[]>>,
+    weekOption: number | undefined
   ) => {
     try {
       const response = await fetch(url);
       const jsonData = await response.json();
-      stateSetter(jsonData);
+      setter(jsonData);
       localStorage.setItem(
         cacheKey,
         JSON.stringify({ data: jsonData, timestamp: new Date().getTime() })
@@ -60,9 +57,25 @@ function App() {
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
-      if (week === weekOptions[weekOption]) setIsLoading(false);
+      if (typeof weekOption === "number" && week === weekOptions[weekOption])
+        setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    const cachedSources = localStorage.getItem(SOURCES_CACHE_KEY);
+    if (cachedSources) {
+      const { timestamp, data } = JSON.parse(cachedSources) as SourcesCache;
+      const now = new Date().getTime();
+      if (now - timestamp < SOURCES_CACHE_EXPIRATION_TIME) {
+        setSources(data);
+        return;
+      }
+    }
+
+    fetchData(`${url}/api/sources`, SOURCES_CACHE_KEY, setSources, undefined);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleCachedCourses = (
     cachedCourses: string,
@@ -89,7 +102,7 @@ function App() {
       if (isCacheExpired) return;
     }
 
-    fetchCourses(`${serverUrl}/api`, COURSES_CACHE_KEY, setCourses, 0);
+    fetchData(`${url}/api`, COURSES_CACHE_KEY, setCourses, 0);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [week]);
 
@@ -102,12 +115,7 @@ function App() {
       if (isCacheExpired) return;
     }
 
-    fetchCourses(
-      `${serverUrl}/api/next`,
-      NEXT_COURSES_CACHE_KEY,
-      setNextCourses,
-      0
-    );
+    fetchData(`${url}/api/next`, NEXT_COURSES_CACHE_KEY, setNextCourses, 0);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [week]);
 

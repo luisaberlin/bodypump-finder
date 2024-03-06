@@ -18,15 +18,7 @@ export function buildApi() {
   app.use(cors({ origin }));
 
   app.use((req: Request, _res: Response, next: NextFunction) => {
-    console.log(
-      JSON.stringify({
-        method: req.method,
-        url: req.url,
-        query: req.query,
-        params: req.params,
-        body: req.body,
-      })
-    );
+    console.log(new Date().toISOString(), req.method, req.url);
     next();
   });
 
