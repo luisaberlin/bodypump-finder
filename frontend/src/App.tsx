@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import "./css/App.css";
 import Filter from "./Filter";
-import Tables from "./tables";
 import WeekSelector from "./WeekSelector";
 import { GymData, weekOptions } from "./utils/constants";
+import Tables from "./Tables";
 
 const serverUrl = import.meta.env.VITE_API_URL;
 
