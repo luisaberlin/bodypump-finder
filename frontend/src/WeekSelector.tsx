@@ -1,6 +1,6 @@
 import { useState } from "react";
 import "./css/WeekSelector.css";
-import { weekOptions } from "./utils/constants";
+import { weekOptions } from "./utils/definitions";
 
 interface WeekToggle {
   onWeekSelectorChange: (option: string) => void;

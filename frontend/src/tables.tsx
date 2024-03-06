@@ -1,6 +1,6 @@
 import React from "react";
 import "./css/Tables.css";
-import { GymData } from "./utils/constants";
+import { GymData } from "./utils/definitions";
 import StudioSchedule from "./StudioSchedule";
 
 interface Props {

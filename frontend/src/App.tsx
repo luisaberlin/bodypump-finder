@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import "./css/App.css";
 import Filter from "./Filter";
 import WeekSelector from "./WeekSelector";
-import { GymData, weekOptions } from "./utils/constants";
+import { GymData, weekOptions } from "./utils/definitions";
 import Tables from "./Tables";
 
 const serverUrl = import.meta.env.VITE_API_URL;
