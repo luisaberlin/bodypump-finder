@@ -83,7 +83,7 @@ const customStyles: StylesConfig<OptionsType, IsMulti> = {
   }),
 };
 
-export interface FilterProps {
+interface FilterProps {
   onFilterChange: (studios: string[], days: string[]) => void;
 }
 

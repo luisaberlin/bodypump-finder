@@ -1,11 +1,10 @@
 import { useState } from "react";
 import "./css/WeekSelector.css";
+import { weekOptions } from "./utils/constants";
 
-export interface WeekToggle {
+interface WeekToggle {
   onWeekSelectorChange: (option: string) => void;
 }
-
-export const weekOptions = ["This week", "Next week"];
 
 const WeekSelector: React.FC<WeekToggle> = ({ onWeekSelectorChange }) => {
   const [selectedWeek, setSelectedWeek] = useState(weekOptions[0]);

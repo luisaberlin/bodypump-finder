@@ -2,24 +2,14 @@ import { useEffect, useState } from "react";
 import "./css/App.css";
 import Filter from "./Filter";
 import Tables from "./tables";
-import WeekSelector, { weekOptions } from "./WeekSelector";
+import WeekSelector from "./WeekSelector";
+import { GymData, weekOptions } from "./utils/constants";
 
-// eslint-disable-next-line react-refresh/only-export-components
-export const serverUrl = import.meta.env.VITE_API_URL;
+const serverUrl = import.meta.env.VITE_API_URL;
 
 interface ISources {
   name: string;
   url: string;
-}
-
-export interface Course {
-  time: string;
-  trainer: string;
-  availability: string;
-}
-
-export interface GymData {
-  [key: string]: Course[][];
 }
 
 interface GymDataCache {
