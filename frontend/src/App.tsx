@@ -3,7 +3,7 @@ import "./css/App.css";
 import Filter from "./Filter";
 import WeekSelector from "./WeekSelector";
 import { GymData, weekOptions } from "./utils/definitions";
-import Tables from "./Tables";
+import Schedule from "./Schedule";
 
 const url = import.meta.env.VITE_API_URL;
 
@@ -150,11 +150,11 @@ function App() {
         )}
       </div>
 
-      <Tables
+      <Schedule
         filteredStudios={filteredStudios}
         filteredDays={filteredDays}
         courses={week === weekOptions[0] ? courses : nextCourses}
-      ></Tables>
+      ></Schedule>
 
       <div className="sources">
         <h3>Sources:</h3>

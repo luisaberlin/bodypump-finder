@@ -1,13 +1,7 @@
 import React from "react";
-import "./css/Tables.css";
 import { GymData } from "./utils/definitions";
 import StudioSchedule from "./StudioSchedule";
-
-interface Props {
-  data: GymData;
-  filteredStudios: string[];
-  filteredDays: string[];
-}
+import "./css/Schedule.css";
 
 function getDayName(index: number): string {
   const days = [
@@ -22,7 +16,17 @@ function getDayName(index: number): string {
   return days[index];
 }
 
-const Schedule: React.FC<Props> = ({ data, filteredStudios, filteredDays }) => {
+interface ScheduleProps {
+  courses: GymData;
+  filteredStudios: string[];
+  filteredDays: string[];
+}
+
+const Schedule: React.FC<ScheduleProps> = ({
+  filteredStudios,
+  filteredDays,
+  courses,
+}) => {
   return (
     <div>
       {filteredDays.map((dayIndex: string) => (
@@ -34,7 +38,7 @@ const Schedule: React.FC<Props> = ({ data, filteredStudios, filteredDays }) => {
                 <StudioSchedule
                   key={studio}
                   studio={studio}
-                  courses={data[studio][+dayIndex] ?? []}
+                  courses={courses[studio][+dayIndex] ?? []}
                 />
               </div>
             );
@@ -45,24 +49,4 @@ const Schedule: React.FC<Props> = ({ data, filteredStudios, filteredDays }) => {
   );
 };
 
-interface TableProps {
-  courses: GymData;
-  filteredStudios: string[];
-  filteredDays: string[];
-}
-
-const Tables: React.FC<TableProps> = ({
-  filteredStudios,
-  filteredDays,
-  courses,
-}) => {
-  return (
-    <Schedule
-      data={courses}
-      filteredStudios={filteredStudios}
-      filteredDays={filteredDays}
-    />
-  );
-};
-
-export default Tables;
+export default Schedule;
