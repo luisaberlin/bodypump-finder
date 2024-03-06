@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import "./css/App.css";
 import Filter from "./Filter";
 import Tables from "./tables";
-// import { getMondayAndSunday } from "./utils/dateUtils";
 import WeekSelector, { weekOptions } from "./WeekSelector";
 
 // eslint-disable-next-line react-refresh/only-export-components
@@ -17,9 +16,6 @@ export interface Course {
   time: string;
   trainer: string;
   availability: string;
-  //   weekday: string;
-  //   sessionName: string;
-  //   location: string;
 }
 
 export interface GymData {
@@ -47,7 +43,6 @@ function App() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // const response = await fetch(`${serverUrl}/api/sources`);
         const response = await fetch(`${serverUrl}/api/sources`);
         const jsonData = await response.json();
         setSources(jsonData as unknown as ISources[]);
@@ -55,8 +50,28 @@ function App() {
         console.error("Error fetching data:", error);
       }
     };
-    fetchData(); // Call the async function when the component mounts
-  }, []); // Empty dependency array ensures the effect runs only once when the component mounts
+    fetchData();
+  }, []);
+
+  const fetchCourses = async (
+    url: string,
+    cacheKey: string,
+    stateSetter: React.Dispatch<React.SetStateAction<GymData>>
+  ) => {
+    try {
+      const response = await fetch(url);
+      const jsonData = await response.json();
+      stateSetter(jsonData);
+      localStorage.setItem(
+        cacheKey,
+        JSON.stringify({ data: jsonData, timestamp: new Date().getTime() })
+      );
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
     if (week === weekOptions[0]) setIsLoading(true);
@@ -73,26 +88,12 @@ function App() {
       }
     }
 
-    const fetchData = async (week: string) => {
-      try {
-        const response = await fetch(`${serverUrl}/api`);
-        const jsonData = await response.json();
-        setCourses(jsonData as unknown as GymData);
-        localStorage.setItem(
-          COURSES_CACHE_KEY,
-          JSON.stringify({ data: jsonData, timestamp: new Date().getTime() })
-        );
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        if (week === weekOptions[0]) setIsLoading(false);
-      }
-    };
-    fetchData(week);
+    fetchCourses(`${serverUrl}/api`, COURSES_CACHE_KEY, setCourses);
   }, [week]);
 
   useEffect(() => {
     if (week === weekOptions[1]) setIsLoading(true);
+
     const cachedCourses = localStorage.getItem(NEXT_COURSES_CACHE_KEY);
     if (cachedCourses) {
       const { timestamp, data } = JSON.parse(cachedCourses) as GymDataCache;
@@ -105,22 +106,11 @@ function App() {
       }
     }
 
-    const fetchData = async (week: string) => {
-      try {
-        const response = await fetch(`${serverUrl}/api/next`);
-        const jsonData = await response.json();
-        setNextCourses(jsonData as unknown as GymData);
-        localStorage.setItem(
-          NEXT_COURSES_CACHE_KEY,
-          JSON.stringify({ data: jsonData, timestamp: new Date().getTime() })
-        );
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        if (week === weekOptions[1]) setIsLoading(false);
-      }
-    };
-    fetchData(week);
+    fetchCourses(
+      `${serverUrl}/api/next`,
+      NEXT_COURSES_CACHE_KEY,
+      setNextCourses
+    );
   }, [week]);
 
   const handleWeekSelectorChange = (option: string) => {
