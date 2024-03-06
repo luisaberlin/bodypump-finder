@@ -1,7 +1,7 @@
 import React from "react";
 import StudioSchedule from "./studioSchedule";
 import "./css/Tables.css";
-import { GymData } from "./App";
+import { GymData } from "./utils/constants";
 
 interface Props {
   data: GymData;

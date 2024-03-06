@@ -1,5 +1,5 @@
 import React from "react";
-import { Course } from "./App";
+import { Course } from "./utils/constants";
 
 const StudioSchedule: React.FC<{ studio: string; courses: Course[] }> = ({
   studio,
