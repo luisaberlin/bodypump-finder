@@ -146,9 +146,6 @@ function App() {
         onWeekSelectorChange={handleWeekSelectorChange}
       ></WeekSelector>
 
-      {/* <div className="selectedWeek">
-        {mondayFormetted} - {sundayFormetted}
-      </div> */}
       <div>
         {isLoading ? (
           <div className="loading">Loading Bodypump courses...</div>
