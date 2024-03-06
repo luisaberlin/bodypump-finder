@@ -1,10 +1,6 @@
 import axios from "axios";
 import * as cheerio from "cheerio";
-
-// export interface IFilter {
-//   includedStudios: Array<StudioNames>;
-//   days: Array<0 | 1 | 2 | 3 | 4 | 5 | 6>;
-// }
+import puppeteer from "puppeteer";
 
 export enum StudioNames {
   POTSDAMERPLATZ = "Potsdamerplatz",
@@ -141,7 +137,7 @@ function selectCoursesPerStudio(selector: cheerio.Root, studioName: string) {
   return courses;
 }
 
-export async function scrapAllCourses() {
+export async function scrapCourses() {
   let coursesPerStudio: GymData = {};
 
   await Promise.all(
@@ -155,6 +151,41 @@ export async function scrapAllCourses() {
       );
 
       coursesPerStudio = { ...coursesPerStudio, [studio.name]: courses };
+    })
+  );
+
+  return coursesPerStudio;
+}
+
+export async function scrapCoursesNextWeek() {
+  let coursesPerStudio: GymData = {};
+
+  await Promise.all(
+    studios.map(async (studio) => {
+      const browser = await puppeteer.launch();
+      const page = await browser.newPage();
+      await page.goto(studio.url);
+
+      try {
+        await Promise.all([
+          page.click(".icon-angle-right"),
+          page.waitForNetworkIdle(),
+        ]);
+      } catch (err) {
+        console.warn(err);
+      }
+
+      const modifiedHtml = await page.content();
+      const selector = cheerio.load(modifiedHtml);
+
+      const courses: IExtendedCourseData[][] = selectCoursesPerStudio(
+        selector,
+        studio.name
+      );
+
+      coursesPerStudio = { ...coursesPerStudio, [studio.name]: courses };
+
+      await browser.close();
     })
   );
 

@@ -1,13 +1,13 @@
 import * as express from "express";
-import { scrapAllCourses } from "../../handler/scrapCourses";
+import { scrapCoursesNextWeek } from "../../handler/scrapCourses";
 
-export async function getAllCourses(
+export async function getCoursesNextWeek(
   _req: express.Request,
   res: express.Response,
   next: express.NextFunction
 ) {
   try {
-    const courses = await scrapAllCourses();
+    const courses = await scrapCoursesNextWeek();
 
     res.status(200).send(courses);
   } catch (err) {

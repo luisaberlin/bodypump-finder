@@ -1,7 +1,8 @@
 import express, { Request, Response, NextFunction } from "express";
 import cors from "cors";
-import { getAllCourses } from "./controller/getAllCourses";
+import { getCourses } from "./controller/getCourses";
 import { getSources } from "./controller/getSources";
+import { getCoursesNextWeek } from "./controller/getCoursesNextWeek";
 
 export function buildApi() {
   const app = express();
@@ -28,8 +29,15 @@ export function buildApi() {
   app.use(express.json());
 
   app.get("/api", async (req: Request, res: Response, next: NextFunction) => {
-    await getAllCourses(req, res, next);
+    await getCourses(req, res, next);
   });
+
+  app.get(
+    "/api/next",
+    async (req: Request, res: Response, next: NextFunction) => {
+      await getCoursesNextWeek(req, res, next);
+    }
+  );
 
   app.get(
     "/api/sources",
