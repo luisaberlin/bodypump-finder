@@ -111,8 +111,6 @@ const Filter: React.FC<FilterProps> = ({ onFilterChange }) => {
   const handleDayChange = (newValue: MultiValue<OptionsType>) => {
     if (newValue === null) return;
 
-    console.log("day index:", newValue);
-
     const sortedNewValue = (newValue as unknown as OptionsType[]).sort(
       (a, b) => {
         return parseInt(a.value) - parseInt(b.value);

@@ -34,7 +34,7 @@ const Schedule: React.FC<Props> = ({ data, filteredStudios, filteredDays }) => {
                 <StudioSchedule
                   key={studio}
                   studio={studio}
-                  courses={data[studio][+dayIndex]}
+                  courses={data[studio][+dayIndex] ?? []}
                 />
               </div>
             );
