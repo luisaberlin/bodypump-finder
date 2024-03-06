@@ -10,8 +10,6 @@ export const weekOptions = ["This week", "Next week"];
 const WeekSelector: React.FC<WeekToggle> = ({ onWeekSelectorChange }) => {
   const [selectedWeek, setSelectedWeek] = useState(weekOptions[0]);
 
-  console.log(selectedWeek);
-
   const handleWeekSelectorChange = (option: string) => {
     setSelectedWeek(option);
     onWeekSelectorChange(option);

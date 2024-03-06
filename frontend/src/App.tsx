@@ -32,6 +32,7 @@ interface GymDataCache {
 }
 
 const COURSES_CACHE_KEY = "courses";
+const NEXT_COURSES_CACHE_KEY = "next-week-courses";
 const COURSES_CACHE_EXPIRATION_TIME = 15 * 60 * 1000; // 15 minutes
 
 function App() {
@@ -39,11 +40,9 @@ function App() {
   const [filteredDays, setFilteredDays] = useState<string[]>([]);
   const [sources, setSources] = useState<ISources[]>([{ name: "", url: "" }]);
   const [courses, setCourses] = useState<GymData>({});
+  const [nextCourses, setNextCourses] = useState<GymData>({});
   const [isLoading, setIsLoading] = useState(true);
   const [week, setWeek] = useState<string>(weekOptions[0]);
-
-  // serverUrl = import.meta.env.VITE_API_URL;
-  console.log("API URL:", serverUrl);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -60,6 +59,8 @@ function App() {
   }, []); // Empty dependency array ensures the effect runs only once when the component mounts
 
   useEffect(() => {
+    if (week === weekOptions[0]) setIsLoading(true);
+
     const cachedCourses = localStorage.getItem(COURSES_CACHE_KEY);
     if (cachedCourses) {
       const { timestamp, data } = JSON.parse(cachedCourses) as GymDataCache;
@@ -67,15 +68,13 @@ function App() {
       const now = new Date().getTime();
       if (now - timestamp < COURSES_CACHE_EXPIRATION_TIME) {
         setCourses(data);
-        setIsLoading(false);
+        if (week === weekOptions[0]) setIsLoading(false);
         return;
       }
     }
 
     const fetchData = async (week: string) => {
       try {
-        // use week
-        console.log("selected week:", week);
         const response = await fetch(`${serverUrl}/api`);
         const jsonData = await response.json();
         setCourses(jsonData as unknown as GymData);
@@ -86,7 +85,39 @@ function App() {
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
-        setIsLoading(false);
+        if (week === weekOptions[0]) setIsLoading(false);
+      }
+    };
+    fetchData(week);
+  }, [week]);
+
+  useEffect(() => {
+    if (week === weekOptions[1]) setIsLoading(true);
+    const cachedCourses = localStorage.getItem(NEXT_COURSES_CACHE_KEY);
+    if (cachedCourses) {
+      const { timestamp, data } = JSON.parse(cachedCourses) as GymDataCache;
+
+      const now = new Date().getTime();
+      if (now - timestamp < COURSES_CACHE_EXPIRATION_TIME) {
+        setNextCourses(data);
+        if (week === weekOptions[1]) setIsLoading(false);
+        return;
+      }
+    }
+
+    const fetchData = async (week: string) => {
+      try {
+        const response = await fetch(`${serverUrl}/api/next`);
+        const jsonData = await response.json();
+        setNextCourses(jsonData as unknown as GymData);
+        localStorage.setItem(
+          NEXT_COURSES_CACHE_KEY,
+          JSON.stringify({ data: jsonData, timestamp: new Date().getTime() })
+        );
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        if (week === weekOptions[1]) setIsLoading(false);
       }
     };
     fetchData(week);
@@ -131,7 +162,7 @@ function App() {
       <Tables
         filteredStudios={filteredStudios}
         filteredDays={filteredDays}
-        courses={courses}
+        courses={week === weekOptions[0] ? courses : nextCourses}
       ></Tables>
 
       <div className="sources">
