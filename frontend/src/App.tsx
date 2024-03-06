@@ -27,9 +27,9 @@ interface GymDataCache {
   timestamp: number;
 }
 
-const COURSES_CACHE_KEY = "courses";
+const COURSES_CACHE_KEY = "this-week-courses";
 const NEXT_COURSES_CACHE_KEY = "next-week-courses";
-const COURSES_CACHE_EXPIRATION_TIME = 15 * 60 * 1000; // 15 minutes
+const CACHE_EXPIRATION_TIME = 15 * 60 * 1000; // 15 minutes
 
 function App() {
   const [filteredStudios, setFilteredStudios] = useState<string[]>([]);
@@ -56,7 +56,8 @@ function App() {
   const fetchCourses = async (
     url: string,
     cacheKey: string,
-    stateSetter: React.Dispatch<React.SetStateAction<GymData>>
+    stateSetter: React.Dispatch<React.SetStateAction<GymData>>,
+    weekOption: number
   ) => {
     try {
       const response = await fetch(url);
@@ -69,8 +70,24 @@ function App() {
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
-      setIsLoading(false);
+      if (week === weekOptions[weekOption]) setIsLoading(false);
     }
+  };
+
+  const handleCachedCourses = (
+    cachedCourses: string,
+    week: string,
+    weekOption: number
+  ) => {
+    const { timestamp, data } = JSON.parse(cachedCourses) as GymDataCache;
+
+    const now = new Date().getTime();
+    if (now - timestamp < CACHE_EXPIRATION_TIME) {
+      weekOption === 0 ? setCourses(data) : setNextCourses(data);
+      if (week === weekOptions[weekOption]) setIsLoading(false);
+      return { isCacheExpired: true };
+    }
+    return { isCacheExpired: false };
   };
 
   useEffect(() => {
@@ -78,17 +95,12 @@ function App() {
 
     const cachedCourses = localStorage.getItem(COURSES_CACHE_KEY);
     if (cachedCourses) {
-      const { timestamp, data } = JSON.parse(cachedCourses) as GymDataCache;
-
-      const now = new Date().getTime();
-      if (now - timestamp < COURSES_CACHE_EXPIRATION_TIME) {
-        setCourses(data);
-        if (week === weekOptions[0]) setIsLoading(false);
-        return;
-      }
+      const { isCacheExpired } = handleCachedCourses(cachedCourses, week, 0);
+      if (isCacheExpired) return;
     }
 
-    fetchCourses(`${serverUrl}/api`, COURSES_CACHE_KEY, setCourses);
+    fetchCourses(`${serverUrl}/api`, COURSES_CACHE_KEY, setCourses, 0);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [week]);
 
   useEffect(() => {
@@ -96,31 +108,18 @@ function App() {
 
     const cachedCourses = localStorage.getItem(NEXT_COURSES_CACHE_KEY);
     if (cachedCourses) {
-      const { timestamp, data } = JSON.parse(cachedCourses) as GymDataCache;
-
-      const now = new Date().getTime();
-      if (now - timestamp < COURSES_CACHE_EXPIRATION_TIME) {
-        setNextCourses(data);
-        if (week === weekOptions[1]) setIsLoading(false);
-        return;
-      }
+      const { isCacheExpired } = handleCachedCourses(cachedCourses, week, 1);
+      if (isCacheExpired) return;
     }
 
     fetchCourses(
       `${serverUrl}/api/next`,
       NEXT_COURSES_CACHE_KEY,
-      setNextCourses
+      setNextCourses,
+      0
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [week]);
-
-  const handleWeekSelectorChange = (option: string) => {
-    setWeek(option);
-  };
-
-  const handleFilterChange = (studios: string[], days: string[]) => {
-    setFilteredStudios(studios);
-    setFilteredDays(days);
-  };
 
   return (
     <div className="app">
@@ -133,7 +132,9 @@ function App() {
       </p>
 
       <WeekSelector
-        onWeekSelectorChange={handleWeekSelectorChange}
+        onWeekSelectorChange={(option: string) => {
+          setWeek(option);
+        }}
       ></WeekSelector>
 
       <div>
@@ -141,7 +142,12 @@ function App() {
           <div className="loading">Loading Bodypump courses...</div>
         ) : (
           <div>
-            <Filter onFilterChange={handleFilterChange}></Filter>
+            <Filter
+              onFilterChange={(studios: string[], days: string[]) => {
+                setFilteredStudios(studios);
+                setFilteredDays(days);
+              }}
+            ></Filter>
           </div>
         )}
       </div>
