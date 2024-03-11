@@ -1,11 +1,11 @@
 import axios from "axios";
 import * as cheerio from "cheerio";
-import puppeteer from "puppeteer";
+import { getStartDate } from "../utils/date";
 
 export enum StudioNames {
   POTSDAMERPLATZ = "Potsdamerplatz",
   GENDARMENMARKT = "Gendarmenmarkt",
-  BISMARCKSTRAßE = "Bismarckstraße",
+  BISMARCKSTRASSE = "Bismarckstraße",
   OSTKREUZ = "Ostkreuz",
 }
 
@@ -19,12 +19,31 @@ export const studios = [
     url: "https://www.eversports.de/widget/w/n07bx2",
   },
   {
-    name: StudioNames.BISMARCKSTRAßE,
+    name: StudioNames.BISMARCKSTRASSE,
     url: "https://www.eversports.de/widget/w/yyf0vb",
   },
   {
     name: StudioNames.OSTKREUZ,
     url: "https://www.eversports.de/widget/w/3om7pa",
+  },
+];
+
+export const studiosNew = [
+  {
+    name: StudioNames.POTSDAMERPLATZ,
+    shortId: "2obfkr",
+  },
+  {
+    name: StudioNames.GENDARMENMARKT,
+    shortId: "n07bx2",
+  },
+  {
+    name: StudioNames.BISMARCKSTRASSE,
+    shortId: "yyf0vb",
+  },
+  {
+    name: StudioNames.OSTKREUZ,
+    shortId: "3om7pa",
   },
 ];
 
@@ -137,13 +156,22 @@ function selectCoursesPerStudio(selector: cheerio.Root, studioName: string) {
   return courses;
 }
 
-export async function scrapCourses() {
+/**
+ * @param date iso string
+ * @returns all Bodypump courses of the week to which this date belongs
+ */
+export async function scrapCourses(date: string) {
   let coursesPerStudio: GymData = {};
 
+  const startDate = getStartDate(date);
+
   await Promise.all(
-    studios.map(async (studio) => {
-      const response = await axios.get(studio.url);
-      const selector = cheerio.load(response.data);
+    studiosNew.map(async (studio) => {
+      const url = `https://www.eversports.de/widget/api/eventsession/calendar?facilityShortId=${studio.shortId}&startDate=${startDate}&activeEventType=universal`;
+
+      const response = await axios.get(url);
+
+      const selector = cheerio.load(response.data.data.html);
 
       const courses: IExtendedCourseData[][] = selectCoursesPerStudio(
         selector,
@@ -151,41 +179,6 @@ export async function scrapCourses() {
       );
 
       coursesPerStudio = { ...coursesPerStudio, [studio.name]: courses };
-    })
-  );
-
-  return coursesPerStudio;
-}
-
-export async function scrapCoursesNextWeek() {
-  let coursesPerStudio: GymData = {};
-
-  await Promise.all(
-    studios.map(async (studio) => {
-      const browser = await puppeteer.launch();
-      const page = await browser.newPage();
-      await page.goto(studio.url);
-
-      try {
-        await Promise.all([
-          page.click(".icon-angle-right"),
-          page.waitForNetworkIdle(),
-        ]);
-      } catch (err) {
-        console.warn(err);
-      }
-
-      const modifiedHtml = await page.content();
-      const selector = cheerio.load(modifiedHtml);
-
-      const courses: IExtendedCourseData[][] = selectCoursesPerStudio(
-        selector,
-        studio.name
-      );
-
-      coursesPerStudio = { ...coursesPerStudio, [studio.name]: courses };
-
-      await browser.close();
     })
   );
 
