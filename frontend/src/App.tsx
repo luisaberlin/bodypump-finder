@@ -102,7 +102,9 @@ function App() {
       if (isCacheExpired) return;
     }
 
-    fetchData(`${url}/api`, COURSES_CACHE_KEY, setCourses, 0);
+    const date = new Date().toISOString();
+
+    fetchData(`${url}/api?date=${date}`, COURSES_CACHE_KEY, setCourses, 0);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [week]);
 
@@ -115,7 +117,15 @@ function App() {
       if (isCacheExpired) return;
     }
 
-    fetchData(`${url}/api/next`, NEXT_COURSES_CACHE_KEY, setNextCourses, 0);
+    const date = new Date();
+    date.setDate(date.getDate() + 7);
+
+    fetchData(
+      `${url}/api?date=${date.toISOString()}`,
+      NEXT_COURSES_CACHE_KEY,
+      setNextCourses,
+      1
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [week]);
 
