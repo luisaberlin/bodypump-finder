@@ -4,6 +4,10 @@
 
 This web application is designed to streamline the process of finding Les Mills Bodypump courses offered at various Holmes Place studios in Berlin. Instead of manually checking multiple studio websites, this application consolidates the information into one convenient platform.
 
+<img src="screenshot-bodypump-finder.png"
+     alt="Screenshot Bodypump Finder"
+     style="width: 100%; height: auto;" />
+
 ## Features
 
 - **Data Source:** The application scrapes data from eversports.de to ensure the most up-to-date course information.
