@@ -12,6 +12,7 @@ This web application is designed to streamline the process of finding Les Mills 
 
 - **Data Source:** The application scrapes data from eversports.de to ensure the most up-to-date course information.
 - **Filtering:** Easily filter Bodypump courses by location and day.
+- **Caching:** Caches courses for 15 minutes and the sources for one day.
 
 ## Technologies Used
 
