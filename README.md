@@ -17,7 +17,7 @@ This web application is designed to streamline the process of finding Les Mills 
 ## Technologies Used
 
 - **Frontend:** React, Typescript
-- **Backend:** Node.js
+- **Backend:** Node.js,
 - **Web Scraping:** Axios, Cheerio
 - **Framework:** Express.js
 
