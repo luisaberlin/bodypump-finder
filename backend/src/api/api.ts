@@ -23,10 +23,6 @@ export function buildApi() {
 
   app.use(express.json());
 
-  // app.get("/api", async (req: Request, res: Response, next: NextFunction) => {
-  //   await getCourses(req, res, next);
-  // });
-
   app.get("/api", async (req: Request, res: Response, next: NextFunction) => {
     await getCourses(req, res, next);
   });
